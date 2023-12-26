@@ -14,7 +14,6 @@ string replaceAll(string line, string target, string replacement)
 	int found = line.find(target);
 	while (found != -1)
 	{
-		cout << "line : " << line << endl;
 		line = line.replace(found, target.length(), replacement);
 		found = line.find(target);
 	}
@@ -41,8 +40,8 @@ int* parseBlock(string block, int data[])
 		color = 2;
 	
 	//trim color label and convert to int, assign to proper location in data
-	data[color] = stoi(block.substr(block.length()-2, block.length()-1));
-	cout << "data is : " << data[0] << ", " << data[1] << ", " << data[2] << endl;
+	data[color] = stoi(block.substr(0, block.length()-1));
+	cout << "data[" << color << "] : " << data[color] << endl;
 	return data;
 }
 
@@ -67,15 +66,10 @@ int* parseRound(string round)
 	
 	//make round more parseable
 	//"3 blue, 4 red, 6 green" -> "3b,4r,6g"
-	cout << "replacements" << endl;
 	round = replaceAll(round, "blue", "b");
-	cout << "replace blue" << endl;
 	round = replaceAll(round, "red", "r");
-	cout << "replace red" << endl;
 	round = replaceAll(round, "green", "g");
-	cout << "replace green" << endl;
 	round = replaceAll(round, " ", "");
-	cout << "replace whitespace" << endl;
 
 	//while more blocks
 	while (round.find(",") != -1)
@@ -116,11 +110,12 @@ int* parseRound(string round)
 */
 int* parseGame(string game)
 {
-	cout << "parseGame" << endl;
+	cout << "IN PARSE" << endl;
 	int data[4];
 
 	//get game's id
 	data[0] = stoi(game.substr(5, game.find(":")));
+	cout << "game's id = " << data[0] << endl;
 
 	//get the rest of the game data
 	//e.g. "3 blue, 4 red; ..."
@@ -147,8 +142,13 @@ int* parseGame(string game)
 	data[2] = max(data[2], roundData[1]); //red
 	data[3] = max(data[3], roundData[2]); //green
 
-	int* ptr = data;
-	return ptr;
+	for (int i = 0; i < 4; i++)
+	{
+		cout << "data[" << i << "]: " << data[i] << endl;
+	}
+	
+
+	return data;
 }
 
 int main()
@@ -168,6 +168,7 @@ int main()
 			getline(inputFile, line);
 			cout << line << endl;
 			int* arr = parseGame(line);
+			cout << "IN MAIN" << endl;
 			cout << "Game id = " << arr[0] << endl;
 			cout << "Max blu = " << arr[1] << endl;
 			cout << "Max red = " << arr[2] << endl;
