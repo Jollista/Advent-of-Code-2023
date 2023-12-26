@@ -42,6 +42,7 @@ int* parseBlock(string block, int data[])
 	
 	//trim color label and convert to int, assign to proper location in data
 	data[color] = stoi(block.substr(block.length()-2, block.length()-1));
+	cout << "data is : " << data[0] << ", " << data[1] << ", " << data[2] << endl;
 	return data;
 }
 
@@ -97,8 +98,10 @@ int* parseRound(string round)
 	{
 		data[i] = ptr[i];
 	}
+
+	cout << "IN ROUND\ndata is : " << data[0] << ", " << data[1] << ", " << data[2] << endl;
 	
-	return data;
+	return ptr;
 }
 
 /**
@@ -129,6 +132,7 @@ int* parseGame(string game)
 	{
 		//get isolated round
 		roundData = parseRound(rounds.substr(0, rounds.find(";")));
+		cout << "roundData is : " << roundData[0] << ", " << roundData[1] << ", " << roundData[2] << endl;
 		data[1] = max(data[1], roundData[0]); //blue
 		data[2] = max(data[2], roundData[1]); //red
 		data[3] = max(data[3], roundData[2]); //green
@@ -143,7 +147,8 @@ int* parseGame(string game)
 	data[2] = max(data[2], roundData[1]); //red
 	data[3] = max(data[3], roundData[2]); //green
 
-	return data;
+	int* ptr = data;
+	return ptr;
 }
 
 int main()
