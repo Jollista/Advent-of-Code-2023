@@ -100,7 +100,7 @@ int* parseRound(string round)
 	ptr = parseBlock(round);
 	data[ptr[0]-1] = ptr[ptr[0]];
 
-	cout << "IN ROUND\ndata is : " << data[0] << ", " << data[1] << ", " << data[2] << endl;
+	//cout << "IN ROUND\ndata is : " << data[0] << ", " << data[1] << ", " << data[2] << endl;
 
 	return data;
 }
@@ -138,7 +138,7 @@ int* parseGame(string game)
 	{
 		//get isolated round
 		roundData = parseRound(rounds.substr(0, rounds.find(";")));
-		cout << "roundData is : " << roundData[0] << ", " << roundData[1] << ", " << roundData[2] << endl;
+		//cout << "roundData is : " << roundData[0] << ", " << roundData[1] << ", " << roundData[2] << endl;
 		data[1] = max(data[1], roundData[0]); //blue
 		data[2] = max(data[2], roundData[1]); //red
 		data[3] = max(data[3], roundData[2]); //green
@@ -149,7 +149,7 @@ int* parseGame(string game)
 
 	//get last round
 	roundData = parseRound(rounds);
-	cout << "last roundData is : " << roundData[0] << ", " << roundData[1] << ", " << roundData[2] << endl;
+	//cout << "last roundData is : " << roundData[0] << ", " << roundData[1] << ", " << roundData[2] << endl;
 	cout << roundData << endl;
 
 	data[1] = max(data[1], roundData[0]); //blue
@@ -175,14 +175,14 @@ int main()
 
 	if (inputFile.is_open())
 	{
-		//sum of game ids possible with only 12 red, 13 green, and 14 blue
+		//sum of game ids possible with only 14 blue, 12 red, and 13 green
 		int sum = 0;
 
 		//while more data
 		while (inputFile.peek() != EOF)
 		{
 			getline(inputFile, line);
-			cout << line << endl;
+			cout << endl << line << endl;
 			int* arr = parseGame(line);
 			cout << "IN MAIN" << endl;
 			cout << "Game id = " << arr[0] << endl;
@@ -191,7 +191,7 @@ int main()
 			cout << "Max grn = " << arr[3] << endl;
 
 			//if within bounds, add to sum
-			if (arr[1] <= 13 && arr[2] <= 12 && arr[3] <= 14)
+			if (arr[1] <= 14 && arr[2] <= 12 && arr[3] <= 13)
 			{
 				sum += arr[0]; //add gameID to sum
 			}
