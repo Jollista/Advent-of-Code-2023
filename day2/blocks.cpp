@@ -61,8 +61,8 @@ int* parseBlock(string block, int data[])
 int* parseRound(string round)
 {
 	cout << "parseRound" << endl;
-	int data[3];
-	int* ptr;
+	static int data[3];
+	int* ptr = data;
 	
 	//make round more parseable
 	//"3 blue, 4 red, 6 green" -> "3b,4r,6g"
@@ -94,8 +94,10 @@ int* parseRound(string round)
 	}
 
 	cout << "IN ROUND\ndata is : " << data[0] << ", " << data[1] << ", " << data[2] << endl;
-	
-	return ptr;
+	cout << "ptr is : " << ptr[0] << ", " << ptr[1] << ", " << ptr[2] << endl;
+	cout << ptr << endl;
+
+	return data;
 }
 
 /**
@@ -111,7 +113,7 @@ int* parseRound(string round)
 int* parseGame(string game)
 {
 	cout << "IN PARSE" << endl;
-	int data[4];
+	static int data[4];
 
 	//get game's id
 	data[0] = stoi(game.substr(5, game.find(":")));
@@ -138,6 +140,9 @@ int* parseGame(string game)
 
 	//get last round
 	roundData = parseRound(rounds);
+	cout << "last roundData is : " << roundData[0] << ", " << roundData[1] << ", " << roundData[2] << endl;
+	cout << roundData << endl;
+
 	data[1] = max(data[1], roundData[0]); //blue
 	data[2] = max(data[2], roundData[1]); //red
 	data[3] = max(data[3], roundData[2]); //green
@@ -147,7 +152,6 @@ int* parseGame(string game)
 		cout << "data[" << i << "]: " << data[i] << endl;
 	}
 	
-
 	return data;
 }
 
