@@ -29,19 +29,28 @@ string replaceAll(string line, string target, string replacement)
  * or
  * "102g"
 */
-int* parseBlock(string block, int data[])
+int* parseBlock(string block)
 {
 	cout << "parseBlock" << endl;
 	//determine color
-	int color = 0; //0=blue;1=red;2=green;
+	int color = 1; //0=blue;1=red;2=green;
 	if (block.find("r") != -1)
-		color = 1;
-	else if (block.find("g") != -1)
 		color = 2;
+	else if (block.find("g") != -1)
+		color = 3;
 	
+	static int data[4];
+	data[0] = color;
+	data[1] = 0;
+	data[2] = 0;
+	data[3] = 0;
+
 	//trim color label and convert to int, assign to proper location in data
 	data[color] = stoi(block.substr(0, block.length()-1));
-	cout << "data[" << color << "] : " << data[color] << endl;
+	cout << "data[" << 1 << "] : " << data[1] << endl;
+	cout << "data[" << 2 << "] : " << data[2] << endl;
+	cout << "data[" << 3 << "] : " << data[3] << endl;
+
 	return data;
 }
 
@@ -62,6 +71,10 @@ int* parseRound(string round)
 {
 	cout << "parseRound" << endl;
 	static int data[3];
+	data[0] = 0;
+	data[1] = 0;
+	data[2] = 0;
+
 	int* ptr = data;
 	
 	//make round more parseable
@@ -76,26 +89,18 @@ int* parseRound(string round)
 	{
 		cout << "round: " << round << endl;
 		//parse block and update data
-		ptr = parseBlock(round.substr(0, round.find(",")), data);
-		for (int i = 0; i < 3; i++)
-		{
-			data[i] = ptr[i];
-		}
+		ptr = parseBlock(round.substr(0, round.find(",")));
+		data[ptr[0]-1] = ptr[ptr[0]];
 
 		//trim parsed block
 		round = round.substr(round.find(",")+1, round.length()-1);
 	}
 
 	//parse last block and update data
-	ptr = parseBlock(round, data);
-	for (int i = 0; i < 3; i++)
-	{
-		data[i] = ptr[i];
-	}
+	ptr = parseBlock(round);
+	data[ptr[0]-1] = ptr[ptr[0]];
 
 	cout << "IN ROUND\ndata is : " << data[0] << ", " << data[1] << ", " << data[2] << endl;
-	cout << "ptr is : " << ptr[0] << ", " << ptr[1] << ", " << ptr[2] << endl;
-	cout << ptr << endl;
 
 	return data;
 }
@@ -114,6 +119,10 @@ int* parseGame(string game)
 {
 	cout << "IN PARSE" << endl;
 	static int data[4];
+	data[0] = 0;
+	data[1] = 0;
+	data[2] = 0;
+	data[3] = 0;
 
 	//get game's id
 	data[0] = stoi(game.substr(5, game.find(":")));
@@ -166,6 +175,9 @@ int main()
 
 	if (inputFile.is_open())
 	{
+		//sum of game ids possible with only 12 red, 13 green, and 14 blue
+		int sum = 0;
+
 		//while more data
 		while (inputFile.peek() != EOF)
 		{
@@ -177,6 +189,14 @@ int main()
 			cout << "Max blu = " << arr[1] << endl;
 			cout << "Max red = " << arr[2] << endl;
 			cout << "Max grn = " << arr[3] << endl;
+
+			//if within bounds, add to sum
+			if (arr[1] <= 13 && arr[2] <= 12 && arr[3] <= 14)
+			{
+				sum += arr[0]; //add gameID to sum
+			}
 		}
+
+		cout << "Total valid games: " << sum << endl;
 	}
 }
